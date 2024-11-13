@@ -51,6 +51,15 @@ app.get('/products', (req, res) => {
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
+app.get('/test-db-connection', async (req, res) => {
+  try {
+    await mongoose.connection.db.admin().ping();
+    res.send('MongoDB connection is successful!');
+  } catch (error) {
+    res.status(500).send('MongoDB connection failed');
+  }
+});
+
 
 // Start server
 app.listen(port, () => console.log(`Server running on port ${port}`));
