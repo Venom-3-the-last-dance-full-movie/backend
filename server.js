@@ -19,7 +19,28 @@ mongoose.connect('mongodb+srv://prashantokk:D0V00dTE2itAY2wA@cluster25.s3hll.mon
   console.log('MongoDB connection error: ', err);
 });
 
-// Basic routes for your API (example)
+// Define Product Schema
+const productSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  image: String
+});
+
+// Create Product Model
+const Product = mongoose.model('Product', productSchema);
+
+// Route to add a product
+app.post('/admin/add-product', (req, res) => {
+  const { name, description, price, image } = req.body;
+  const newProduct = new Product({ name, description, price, image });
+
+  newProduct.save()
+    .then(product => res.json({ message: "Product added", product }))
+    .catch(err => res.status(400).json({ message: "Error adding product", error: err }));
+});
+
+// Basic route
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
